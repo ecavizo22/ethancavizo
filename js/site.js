@@ -326,6 +326,13 @@
     };
     addEventListener("scroll", f, { passive: true }); f();
     setTimeout(function () { if (scrollY < 4) stage.classList.add("s1"); }, 700);
+    var cue = $(".scroll-cue", stage);
+    if (cue) cue.addEventListener("click", function (e) {
+      e.preventDefault();
+      var top = pin.getBoundingClientRect().top + scrollY, s = pin.offsetHeight - innerHeight;
+      /* first click reveals the headline and numbers, the next one moves on */
+      scrollTo({ top: stage.classList.contains("s2") ? top + pin.offsetHeight : top + s * 0.6, behavior: "smooth" });
+    });
   });
 
   /* ---------- athletes + one-pager sheet ---------- */
