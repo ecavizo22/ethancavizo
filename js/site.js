@@ -85,6 +85,9 @@
       : "";
   };
   var SOON = "Full write-up coming soon. Ask me about this one in the meantime.";
+  /* logo plate: class + optional fill colour (logoFill) or edge-to-edge crop (logoFit: "cover") */
+  var logoCls = function (p) { return (p.logoBg ? " st-logo-" + p.logoBg : "") + (p.logoFit === "cover" ? " st-logo-cover" : ""); };
+  var logoStyle = function (p) { return p.logoFill ? ' style="background:' + p.logoFill + '"' : ""; };
   /* projects marked upcoming: true in data.js have not happened yet */
   var soonLabel = function (p) { return p.upcoming ? "Upcoming deal" : "Write-up coming soon"; };
   var soonText = function (p) { return p.upcoming ? "In the works. Details after launch." : SOON; };
@@ -213,13 +216,16 @@
     var detail = function (p) {
       /* a photo with no post or deck beside it takes the right-hand column itself */
       var side = p.photo && !deckUrl(p) && !embedUrl(p) && !ownMedia(p);
+      /* with nothing else to show, the logo fills the right-hand column instead */
+      var sideLogo = p.logo && !p.photo && !deckUrl(p) && !embedUrl(p) && !ownMedia(p);
       return {
-        id: p.id, nav: p.title, cls: deckUrl(p) ? "has-embed has-deck" : (embedUrl(p) ? "has-embed" : (ownMedia(p) || side ? "has-own" : "")),
-        html: (ownMedia(p) ? '<div class="st-own">' + ownMedia(p) + "</div>" : (side ? '<div class="st-own st-own-photo"><img src="' + p.photo + '" alt="' + (p.photoAlt || "") + '"></div>' : "")) + embedHtml(p) + '<div class="st-detail">' +
+        id: p.id, nav: p.title, cls: deckUrl(p) ? "has-embed has-deck" : (embedUrl(p) ? "has-embed" : (ownMedia(p) || side || sideLogo ? "has-own" : "")),
+        html: (ownMedia(p) ? '<div class="st-own">' + ownMedia(p) + "</div>" : (side ? '<div class="st-own st-own-photo"><img src="' + p.photo + '" alt="' + (p.photoAlt || "") + '"></div>' :
+          (sideLogo ? '<div class="st-own st-own-photo st-own-logo' + logoCls(p) + '"' + logoStyle(p) + '><img src="' + p.logo + '" alt="' + (p.logoAlt || p.title + " logo") + '"></div>' : ""))) + embedHtml(p) + '<div class="st-detail">' +
           '<div class="label">' + (p.body ? p.tag : soonLabel(p)) + "</div><h2>" + p.title + "</h2>" +
           (p.summary ? '<p class="st-sum">' + p.summary + "</p>" : "") +
           '<div class="prose">' + (p.body || soonText(p)) + "</div>" + linksHtml(p) +
-          (p.logo ? '<figure class="st-logo' + (p.logoBg ? " st-logo-" + p.logoBg : "") + '"><img loading="lazy" src="' + p.logo + '" alt="' + (p.logoAlt || p.title + " logo") + '"></figure>' : "") +
+          (p.logo ? '<figure class="st-logo' + logoCls(p) + (sideLogo ? " st-narrow-only" : "") + '"' + logoStyle(p) + '><img loading="lazy" src="' + p.logo + '" alt="' + (p.logoAlt || p.title + " logo") + '"></figure>' : "") +
           (p.photo ? '<figure class="st-photo' + (side ? " st-narrow-only" : "") + '"><img loading="lazy" src="' + p.photo + '" alt="' + (p.photoAlt || "") + '"></figure>' : "") + "</div>"
       };
     };
@@ -261,8 +267,8 @@
       featHost.parentNode.style.padding = "0";
       makeStepper(featHost, picks.map(function (p) {
         return {
-          id: p.id, nav: p.title, cls: deckUrl(p) ? "has-embed has-deck" : (embedUrl(p) ? "has-embed" : ""),
-          html: '<div class="st-media">' + (ownMedia(p) || (p.photo ? '<img class="st-photo-bg" src="' + p.photo + '" alt="' + (p.photoAlt || "") + '">' : (p.logo ? '<span class="st-logo st-logo-lg' + (p.logoBg ? " st-logo-" + p.logoBg : "") + '"><img src="' + p.logo + '" alt="' + (p.logoAlt || p.title + " logo") + '"></span>' : '<span class="ghost">' + p.title + "</span>"))) + "</div>" + embedHtml(p) +
+          id: p.id, nav: p.title, cls: "st-home" + (deckUrl(p) ? " has-embed has-deck" : (embedUrl(p) ? " has-embed" : "")),
+          html: '<div class="st-media">' + (ownMedia(p) || (p.photo ? '<img class="st-photo-bg" src="' + p.photo + '" alt="' + (p.photoAlt || "") + '">' : (p.logo ? '<span class="st-logo st-logo-lg' + logoCls(p) + '"' + logoStyle(p) + '><img src="' + p.logo + '" alt="' + (p.logoAlt || p.title + " logo") + '"></span>' : '<span class="ghost">' + p.title + "</span>"))) + "</div>" + embedHtml(p) +
             '<div class="st-cap"><h3>' + p.title + (p.tag ? " · " + p.tag : "") + "</h3><p>" + (p.summary || (p.upcoming ? "Upcoming deal. Details after launch." : "Write-up coming soon.")) + '</p><a class="btn" href="work.html#' + p.id + '">Learn more</a></div>'
         };
       }), { head: '<h2 class="title">selected<b>work</b></h2><a class="link arrow" href="work.html">all ' + P.length + " projects</a>" });

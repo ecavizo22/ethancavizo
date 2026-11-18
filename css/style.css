@@ -435,3 +435,26 @@ body[data-page="about"] .site-head { background: var(--deep); }
 .reel figcaption { margin-top: 12px; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--grey); }
 @media (max-width: 820px) { .news { grid-template-columns: 1fr; } .reels { justify-content: start; } }
 @media (max-width: 480px) { .reels { grid-template-columns: minmax(0, 330px); } }
+
+/* ===== home panel: media fills the whole space above the caption, like a photo ===== */
+.st-home { display: flex; flex-direction: column; }
+.st-home .st-media { position: relative; inset: auto; flex: 1; min-height: 0; padding: 0; }
+.st-home .st-cap { position: relative; left: auto; right: auto; bottom: auto; flex: none; }
+.st-home.has-embed .st-media, .st-home.has-embed .st-cap { right: auto; margin-right: min(390px, 38%); }
+.st-home.has-deck .st-media, .st-home.has-deck .st-cap { margin-right: min(600px, 52%); }
+.st-home .ghost { margin: 0 5%; }
+.st-home .st-media img.st-photo-bg { height: 100%; }
+.st-home .st-logo-lg { position: absolute; inset: 0; width: auto; height: auto; margin: 0; border: 0; border-radius: 0; padding: 7% 13%; }
+.st-logo-cover { padding: 0 !important; overflow: hidden; }
+.st-logo-cover img { object-fit: cover !important; }
+@media (max-width: 900px) { .st-home.has-embed .st-media, .st-home.has-embed .st-cap, .st-home.has-deck .st-media, .st-home.has-deck .st-cap { margin-right: 0; } }
+@media (max-width: 700px) { .st-home .st-media { padding-top: 0; } .st-home .st-logo-lg { padding: 9% 14%; } .st-home .st-cap { padding-bottom: 74px; } }
+
+/* ===== work page: logos fill their space ===== */
+.st-detail .st-logo { width: 100%; height: clamp(150px, 25vh, 230px); padding: 30px 22%; }
+.st-detail .st-logo.st-logo-cover { padding: 0; }
+.st-own-logo { display: flex; align-items: center; justify-content: center; padding: 7% 7%; }
+.st-own-logo:not(.st-logo-dark):not(.st-logo-white) { background: var(--cream); }
+.st-own-logo img { width: 100%; height: 100%; object-fit: contain; }
+.st-own-logo.st-logo-cover { padding: 0; }
+.st-own-logo.st-logo-cover img { object-fit: cover; }

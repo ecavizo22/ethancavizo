@@ -18,6 +18,8 @@
    embed    optional Instagram post/reel URL to show in the panel. If left out, the
             first Instagram link in `links` is used. Set embed: false to show none.
    logo     optional brand logo, shown on a cream plate (home panel and under the write-up)
+   logoFill a colour (e.g. "#2f86bb") when the logo file has its own solid background,
+            so the whole space takes that colour; logoFit: "cover" crops a banner edge to edge
    logoBg   "dark" for a white logo, "white" for a logo with a white background; leave out for cream
    photo    optional photo shown with the write-up (and as the home panel image) in
             addition to an embed or deck; photoAlt describes it
@@ -47,7 +49,7 @@ window.PROJECTS = [
     links: [{ label: "Luke and Trent's reel", url: "https://www.instagram.com/reel/DZq3pCjMRG8/" }]
   },
   {
-    id: "textyle", date: "2026-05-20", logo: "assets/logos/textyle.png", logoAlt: "Textyle logo", featured: 3, title: "TEXTYLE", cat: "brand", tag: "Brand Partnership",
+    id: "textyle", date: "2026-05-20", logo: "assets/logos/textyle.png", logoAlt: "Textyle logo", logoFill: "#2f86bb", featured: 3, title: "TEXTYLE", cat: "brand", tag: "Brand Partnership",
     summary: "A partnership I sourced myself: three athletes, two shoots, and every contract detail walked through with the owners.",
     body: `<strong>Sourced this partnership myself</strong>, from the first conversation to signed contracts. I met with Textyle's owners in person and on calls to build out what they wanted from an athlete partnership.<br><br>I pitched three athletes to promote the store's style and bring more people through the door: <strong>Burke-Lee Mabeus, Riley Taylor, and Aaliyah McCormick</strong>. I scheduled and coordinated two shoots, one with Aaliyah and one with Burke-Lee and Riley. I handled the contracts, walked the owners through every detail, and made sure each athlete received their compensation.<br><br>The best part was the casting. <strong>Getting the right athletes on board</strong> is what made this one work.`,
     links: [{ label: "Aaliyah's reel", url: "https://www.instagram.com/reel/DYfNl2hpO1t/" }]
@@ -106,7 +108,7 @@ window.PROJECTS = [
   },
   {
     id: "discover-u", date: "2026-05-05", title: "Discover U", cat: "community", tag: "Volunteer · Event",
-    logo: "assets/logos/oregon-athletics.jpg", logoAlt: "Oregon Ducks athletics logo",
+    logo: "assets/logos/oregon-athletics.jpg", logoAlt: "Oregon Ducks athletics logo", logoFill: "#007b40",
     photo: "assets/discover-u.jpg", photoAlt: "The Discover U stage and audience at the event",
     summary: "Volunteered as a Room Producer at a career event for Oregon football players.",
     body: `Volunteered as a <strong>Room Producer</strong> at Discover U, an event where Oregon football players hear from industry speakers about their long-term goals and careers after college.<br><br>I ran the room for two presenters, <strong>Kelly Johnson (ESPN, Disney)</strong> and <strong>Nabil Kanso (USI Insurance Services)</strong>: organizing the slide deck, making sure the technology worked, and keeping the speakers ready, on time, and in the right place.<br><br>At the end of the event, I helped <strong>pitch Oregon Accelerator</strong> to new football athletes.`,
@@ -125,7 +127,7 @@ window.PROJECTS = [
     links: []
   },
   {
-    id: "cluckin-dog", date: "2026-02-24", logo: "assets/logos/cluckin-dog.jpg", logoAlt: "Cluckin' Dog logo", logoBg: "white", title: "Cluckin Dog", cat: "brand", tag: "Brand Partnership",
+    id: "cluckin-dog", date: "2026-02-24", logo: "assets/logos/cluckin-dog.jpg", logoAlt: "Cluckin' Dog logo", logoBg: "white", logoFit: "cover", title: "Cluckin Dog", cat: "brand", tag: "Brand Partnership",
     summary: "Built the relationship with the owner and landed the deal for Kai Greer.",
     body: `Established the relationship with the brand owner and discussed activation goals. Successfully secured the partnership for my athlete <strong>Kai Greer</strong>. Directed the creative vision for the shoot, attended and organized on-site logistics, and coordinated with the <strong>PR team</strong> to finalize and publish the promotional post.`,
     links: [{ label: "Kai's post", url: "https://www.instagram.com/p/DVPZmv2Enc0/" }]
