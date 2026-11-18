@@ -397,3 +397,41 @@ body[data-page="about"] .site-head { background: var(--deep); }
 .st-deck iframe { height: 100%; }
 .st-deck .st-crop { background: var(--deep); }
 @media (max-width: 900px) { .has-deck .st-cap, .has-deck .st-detail, .has-deck .st-media { right: 0; } }
+
+/* faded title sizes itself to the space left of the media, so it never runs under it */
+.st-media { container-type: inline-size; overflow: hidden; }
+.ghost { font-size: clamp(40px, 12.5cqw, 128px); max-width: 100%; overflow-wrap: break-word; }
+
+/* extra project photo */
+.st-photo { margin-top: 26px; }
+.st-photo img { width: 100%; border-radius: 4px; }
+.st-media img.st-photo-bg { height: calc(100% - 178px); object-position: 62% 100%; }
+
+/* brand logo on a cream plate, so any logo colour reads on the navy */
+.st-logo { display: flex; align-items: center; justify-content: center; background: var(--cream); border-radius: 4px; margin-top: 26px; width: 260px; max-width: 100%; height: 150px; padding: 26px 34px; }
+.st-logo img { position: static !important; width: 100% !important; height: 100% !important; object-fit: contain !important; }
+.st-logo-lg { position: relative; margin-top: -14%; width: min(440px, 80%); height: clamp(180px, 34vh, 260px); padding: 44px 56px; }
+.st-logo-dark { background: #04101f; border: 1px solid var(--line); }
+.st-logo-white { background: #fff; }
+@media (max-width: 700px) {
+  .st-media { align-items: flex-start; padding-top: 22px; }
+  .st-logo-lg { margin-top: 0; width: 100%; height: 170px; padding: 28px 40px; }
+  .ghost { margin-top: 6px; }
+  .st-media img.st-photo-bg { height: calc(100% - 230px); }
+}
+
+/* photo used as the right-hand column */
+.st-own-photo { width: calc(42% - 26px); top: 20px; right: 26px; bottom: 66px; border-radius: 6px; overflow: hidden; }
+.st-own-photo::after { display: none; }
+.has-own .st-own-photo ~ .st-detail { right: 42%; }
+@media (min-width: 901px) { .st-narrow-only { display: none; } }
+
+/* blog: NIL news reels */
+.news { display: grid; grid-template-columns: minmax(0, 400px) 1fr; gap: clamp(24px, 5vw, 72px); align-items: start; margin-top: clamp(48px, 7vw, 92px); padding-top: clamp(36px, 5vw, 60px); border-top: 1px solid var(--line); }
+.news h3 { font-size: clamp(30px, 3.8vw, 52px); text-transform: lowercase; letter-spacing: -0.04em; margin: 14px 0 16px; }
+.reels { display: grid; grid-template-columns: repeat(2, minmax(0, 330px)); gap: 22px; justify-content: end; }
+.reel { margin: 0; container-type: inline-size; }
+.reel iframe { display: block; width: 100%; height: calc(100% + 700px); border: 0; }
+.reel figcaption { margin-top: 12px; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--grey); }
+@media (max-width: 820px) { .news { grid-template-columns: 1fr; } .reels { justify-content: start; } }
+@media (max-width: 480px) { .reels { grid-template-columns: minmax(0, 330px); } }

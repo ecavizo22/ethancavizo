@@ -6,6 +6,8 @@
   var slug = function (s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); };
 
   var P = window.PROJECTS || [], A = window.ATHLETES || [], F = window.PROJECT_FILTERS || [];
+  /* Work page order: newest first, by each project's date */
+  P = P.slice().sort(function (a, b) { return (b.date || "").localeCompare(a.date || ""); });
   var EMAIL = "ecavizo22@gmail.com", LINKEDIN = "https://www.linkedin.com/in/ethan-cavizo";
   var MARK = "ethan<b>cavizo</b><small>NIL · Athlete Representation</small>";
   var usedFilters = F.filter(function (f) { return f.key === "all" || P.some(function (p) { return p.cat === f.key; }); });
@@ -83,6 +85,9 @@
       : "";
   };
   var SOON = "Full write-up coming soon. Ask me about this one in the meantime.";
+  /* projects marked upcoming: true in data.js have not happened yet */
+  var soonLabel = function (p) { return p.upcoming ? "Upcoming deal" : "Write-up coming soon"; };
+  var soonText = function (p) { return p.upcoming ? "In the works. Details after launch." : SOON; };
 
   /* Panel media. Your own photo or clip (img / video in data.js) wins;
      otherwise the project's first Instagram post is embedded beside the text. */
@@ -179,10 +184,10 @@
       '<li id="' + p.id + '" data-cat="' + p.cat + '">' +
       '<button class="row" aria-expanded="false">' +
       "<div><h3>" + p.title + "</h3>" + (p.summary ? "<p>" + p.summary + "</p>" : "") + "</div>" +
-      (pending ? '<span class="soon">Write-up coming soon</span>' : '<span class="tag">' + p.tag + "</span>") +
+      (pending ? '<span class="soon">' + soonLabel(p) + '</span>' : '<span class="tag">' + p.tag + "</span>") +
       '<span class="pm" aria-hidden="true"></span></button>' +
       '<div class="panel"><div><div class="panel-in">' +
-      '<div class="prose">' + (p.body || SOON) + "</div>" + linksHtml(p) +
+      '<div class="prose">' + (p.body || soonText(p)) + "</div>" + linksHtml(p) +
       "</div></div></div></li>"
     );
     return li;
@@ -206,12 +211,16 @@
   if (list && workHost) {
     var bar = $("#filters"), empty = $("#work-empty"), workStepper = null;
     var detail = function (p) {
+      /* a photo with no post or deck beside it takes the right-hand column itself */
+      var side = p.photo && !deckUrl(p) && !embedUrl(p) && !ownMedia(p);
       return {
-        id: p.id, nav: p.title, cls: deckUrl(p) ? "has-embed has-deck" : (embedUrl(p) ? "has-embed" : (ownMedia(p) ? "has-own" : "")),
-        html: (ownMedia(p) ? '<div class="st-own">' + ownMedia(p) + "</div>" : "") + embedHtml(p) + '<div class="st-detail">' +
-          '<div class="label">' + (p.body ? p.tag : "Write-up coming soon") + "</div><h2>" + p.title + "</h2>" +
+        id: p.id, nav: p.title, cls: deckUrl(p) ? "has-embed has-deck" : (embedUrl(p) ? "has-embed" : (ownMedia(p) || side ? "has-own" : "")),
+        html: (ownMedia(p) ? '<div class="st-own">' + ownMedia(p) + "</div>" : (side ? '<div class="st-own st-own-photo"><img src="' + p.photo + '" alt="' + (p.photoAlt || "") + '"></div>' : "")) + embedHtml(p) + '<div class="st-detail">' +
+          '<div class="label">' + (p.body ? p.tag : soonLabel(p)) + "</div><h2>" + p.title + "</h2>" +
           (p.summary ? '<p class="st-sum">' + p.summary + "</p>" : "") +
-          '<div class="prose">' + (p.body || SOON) + "</div>" + linksHtml(p) + "</div>"
+          '<div class="prose">' + (p.body || soonText(p)) + "</div>" + linksHtml(p) +
+          (p.logo ? '<figure class="st-logo' + (p.logoBg ? " st-logo-" + p.logoBg : "") + '"><img loading="lazy" src="' + p.logo + '" alt="' + (p.logoAlt || p.title + " logo") + '"></figure>' : "") +
+          (p.photo ? '<figure class="st-photo' + (side ? " st-narrow-only" : "") + '"><img loading="lazy" src="' + p.photo + '" alt="' + (p.photoAlt || "") + '"></figure>' : "") + "</div>"
       };
     };
     var renderWork = function (key) {
@@ -253,14 +262,14 @@
       makeStepper(featHost, picks.map(function (p) {
         return {
           id: p.id, nav: p.title, cls: deckUrl(p) ? "has-embed has-deck" : (embedUrl(p) ? "has-embed" : ""),
-          html: '<div class="st-media">' + (ownMedia(p) || '<span class="ghost">' + p.title + "</span>") + "</div>" + embedHtml(p) +
-            '<div class="st-cap"><h3>' + p.title + (p.tag ? " · " + p.tag : "") + "</h3><p>" + (p.summary || "Write-up coming soon.") + '</p><a class="btn" href="work.html#' + p.id + '">Learn more</a></div>'
+          html: '<div class="st-media">' + (ownMedia(p) || (p.photo ? '<img class="st-photo-bg" src="' + p.photo + '" alt="' + (p.photoAlt || "") + '">' : (p.logo ? '<span class="st-logo st-logo-lg' + (p.logoBg ? " st-logo-" + p.logoBg : "") + '"><img src="' + p.logo + '" alt="' + (p.logoAlt || p.title + " logo") + '"></span>' : '<span class="ghost">' + p.title + "</span>"))) + "</div>" + embedHtml(p) +
+            '<div class="st-cap"><h3>' + p.title + (p.tag ? " · " + p.tag : "") + "</h3><p>" + (p.summary || (p.upcoming ? "Upcoming deal. Details after launch." : "Write-up coming soon.")) + '</p><a class="btn" href="work.html#' + p.id + '">Learn more</a></div>'
         };
       }), { head: '<h2 class="title">selected<b>work</b></h2><a class="link arrow" href="work.html">all ' + P.length + " projects</a>" });
     } else {
       picks.forEach(function (p) {
         feat.append(el(
-          '<li><a class="row" href="work.html#' + p.id + '"><div><h3>' + p.title + "</h3><p>" + (p.summary || "Write-up coming soon.") + '</p></div><span class="tag">' + (p.tag || "") + '</span><span class="go" aria-hidden="true">→</span></a></li>'
+          '<li><a class="row" href="work.html#' + p.id + '"><div><h3>' + p.title + "</h3><p>" + (p.summary || (p.upcoming ? "Upcoming deal. Details after launch." : "Write-up coming soon.")) + '</p></div><span class="tag">' + (p.tag || "") + '</span><span class="go" aria-hidden="true">→</span></a></li>'
         ));
       });
     }
